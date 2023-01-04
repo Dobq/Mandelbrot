@@ -1,0 +1,25 @@
+Examples A are obtained by setting:
+
+maxlim=500
+focus=complex(-1.759,0.02)
+dist=0.0000025
+res=11
+cl=16
+
+A_0 is just a regular image.
+
+A_1 is image taken after square-inserting stage of algorithm and before naive stage, as it can be seen almost all of pixels are calculated while first stage takes only 50-60% of time (pixels that are not calculated yet are drawn yellow).
+
+A_2 and A_3 are nice-looking glitchy images I found by accidentally writting "s*2-1" instead of "s*2", they can obtained by modyfing definition of squa_divi: make k running range(1,s*2-1) or range(2,s*2) instead of range(1,s*2) (or ss instead of s in Mandel_opt_func.py) and save graphics before naive stage of algorithm (or just omit this stage by commenting lines 118-120 in Mandel_opt_loops.py or line 114 in Mandel_opt_func.py).
+
+-------
+
+Examples B are obtained by setting:
+
+maxlim=1800
+focus=complex(-0.7471,0.1021)
+dist=0.00000375
+res=11
+cl=16
+
+As in previous case, B_0 is just a regular image and B_1 is image taken between square-inserting and naive stages of algorithm.
