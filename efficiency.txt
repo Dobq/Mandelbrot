@@ -1,5 +1,7 @@
 Mean time (in seconds) in 5 runs (at least on my laptop) for each .py file and given input value.
 
+Optimalised algorithms were ran without counting percentage of pixels calculated inidirectly, what affects results a little bit.
+
 ----
 
 maxlim=500
@@ -8,9 +10,25 @@ dist=0.0000025
 res=11
 cl=16
 
-opt_func:  31,4892
-opt_loops: 32,6530
-simple:    49,3704
+opt_func:   31,4892
+opt_loops:  32,6530
+simple:     49,3704
+
+----
+
+maxlim=1800
+focus=complex(-0.7471,0.1021)
+dist=0.00000375
+res=11
+cl=16
+
+(single run for each algorithm)
+
+opt_func:  269.5980
+opt_loops: 268.4140
+simple:    419.1005
+
+(opt_loops bit better than opt_func probably due to chance)
 
 ----
 
@@ -20,9 +38,9 @@ dist=0.0000025
 res=8
 cl=16
 
-opt_func:   4,6554
-opt_loops:  4,6736
-simple:     4,7234
+opt_func:    4,6554
+opt_loops:   4,6736
+simple:      4,7234
 
 ----
 
@@ -32,10 +50,10 @@ dist=0.0000025
 res=8
 cl=16
 
-opt_func:   1,0330
-opt_loops:  1,0388
-simple:     1,0872
+opt_func:    1,0330
+opt_loops:   1,0388
+simple:      1,0872
 
 ----
 
-By this simple analysis we can conclude, that opt_func is best of considered agorithms, but only bit better than opt_loops. However meaningful differnces between opt_* and simple algorithms appears for bigger values of res variable (remind that for res=11 algorithm calculates image of about 64 times bigger "surface" than in res=8 case).
+After this simple analysis it seems, that opt_func is probably best of considered algorithms, but only bit better than opt_loops. However meaningful differnces between opt_* and simple algorithms appears for bigger values of res variable (remind that for res=11 algorithm calculates image of about 64 times bigger "surface" than in res=8 case).

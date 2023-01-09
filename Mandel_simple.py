@@ -32,7 +32,7 @@ black=[0,0,0]
 
 from math import sin,pi
 from PIL.Image import fromarray
-import numpy as np
+from numpy import array,uint8
 
 #MACHINERY####################################################################
 
@@ -46,8 +46,20 @@ def citer(x,p,lim):
 
 #COLOR PATTERN AND COLORING FUNCTIONS#########################################
 
-Col_c=[np.array([round((sin(i/cl*pi))*carmi[j]+(1-sin(i/cl*pi))*white[j]) for j in range(3)]) for i in range(cl)]
-Col_s=[np.array([round((sin(i/cl*pi))*seagr[j]+(1-sin(i/cl*pi))*white[j]) for j in range(3)]) for i in range(cl)]
+Col_c=[
+        array([
+                round((sin(i/cl*pi))*carmi[j]+(1-sin(i/cl*pi))*white[j])
+                for j in range(3)
+        ])
+        for i in range(cl)
+]
+Col_s=[
+        array([
+                round((sin(i/cl*pi))*seagr[j]+(1-sin(i/cl*pi))*white[j])
+                for j in range(3)
+        ])
+        for i in range(cl)
+]
 Col=Col_c+Col_s
 
 def fRGB(n):
@@ -57,23 +69,21 @@ def fRGB(n):
         return black
 
 def arrayRGB(L):
-    data=np.array([np.array(list(map(fRGB,L[i]))) for i in R],dtype=np.uint8)
+    data=array([array(list(map(fRGB,L[i]))) for i in R],dtype=uint8)
     return data
 
 T.append(timer()) #1
 
 #CALCULATING STUFF, COLORING AND SAVING GRAPHICS##############################
 
-img=fromarray(arrayRGB([[citer(0,focus+complex((i-resn)*dist,(j-resn)*dist),maxlim) for j in R] for i in R]),'RGB')
-T.append(timer()) #2
-img.save('image_simple.png')
+fromarray(arrayRGB([[citer(0,focus+complex((i-resn)*dist,(j-resn)*dist),maxlim) for j in R] for i in R]),'RGB').save('image_simple.png')
 
-T.append(timer()) #3
+T.append(timer()) #2
 
 #PRINTING TIMES###############################################################
 
-for i in range(3):
+for i in range(2):
     print(round(T[i+1]-T[i],3))
-print(round(T[3]-T[0],3))
+print('Total time: '+str(round(T[2]-T[0],4))+' seconds.')
 
 ##############################################################################

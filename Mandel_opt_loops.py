@@ -33,7 +33,7 @@ black=[0,0,0]
 
 from math import sin,pi
 from PIL.Image import fromarray
-import numpy as np
+from numpy import array,full,uint8
 
 #MACHINERY####################################################################
 
@@ -62,13 +62,29 @@ def squa_divi(step):
                 calc_cros(i,j,s,k)
 
 def squa_inse(i,j,s):
-    M[s*i+1:s*i+s,s*j+1:s*j+s]=np.full((s-1,s-1),M[s*i,s*j],dtype=int)
+    squac[0]+=s**2 #comment it if statistics not wanted
+    M[s*i+1:s*i+s,s*j+1:s*j+s]=full((s-1,s-1),M[s*i,s*j],dtype=int)
 
 def squa_chec(step):
     for (i,j) in [(i,j) for j in range(2**(res-step+1)) for i in range(2**(res-step+1))]:
-        if M[int(s*i+s/2),int(s*j+s/2)]==-1 and len(set([M[s*i,s*j],M[s*i+s,s*j],M[s*i,s*j+s],M[s*i+s,s*j+s]]))==1 and len(set(M[s*i:s*i+s,s*j]).union(set(M[s*i,s*j:s*j+s]),set(M[s*i:s*i+s,s*j+s]),set(M[s*i+s,s*j:s*j+s])))==1:
+        if (
+                M[s*i+s//2,s*j+s//2]==-1
+                and len(set([
+                        M[s*i,s*j],
+                        M[s*i+s,s*j],
+                        M[s*i,s*j+s],
+                        M[s*i+s,s*j+s]
+                ]))==1
+                and len(set().union(
+                        set(M[s*i:s*i+s,s*j]),
+                        set(M[s*i,s*j:s*j+s]),
+                        set(M[s*i:s*i+s,s*j+s]),
+                        set(M[s*i+s,s*j:s*j+s])
+                ))==1
+        ): #it's not that sad!
             squa_inse(i,j,s)
 
+squac=[0] #comment it if statistics not wanted
 s=0
 RR_l=[]
 def squa_stuf(step):
@@ -81,8 +97,20 @@ def squa_stuf(step):
 
 #COLOR PATTERN AND COLORING FUNCTIONS#########################################
 
-Col_c=[np.array([round((sin(i/cl*pi))*carmi[j]+(1-sin(i/cl*pi))*white[j]) for j in range(3)]) for i in range(cl)]
-Col_s=[np.array([round((sin(i/cl*pi))*seagr[j]+(1-sin(i/cl*pi))*white[j]) for j in range(3)]) for i in range(cl)]
+Col_c=[
+        array([
+                round((sin(i/cl*pi))*carmi[j]+(1-sin(i/cl*pi))*white[j])
+                for j in range(3)
+        ])
+        for i in range(cl)
+]
+Col_s=[
+        array([
+                round((sin(i/cl*pi))*seagr[j]+(1-sin(i/cl*pi))*white[j])
+                for j in range(3)
+        ])
+        for i in range(cl)
+]
 Col=Col_c+Col_s
 
 def fRGB(n):
@@ -94,13 +122,13 @@ def fRGB(n):
         return yello
 
 def arrayRGB(L):
-    return np.array([np.array(list(map(fRGB,L[i]))) for i in R],dtype=np.uint8)
+    return array([array(list(map(fRGB,L[i]))) for i in R],dtype=uint8)
 
 T.append(timer()) #1
 
 #CALCULATIONS#################################################################
 
-M=np.full((ress,ress),-1,dtype=int)
+M=full((ress,ress),-1,dtype=int)
 
 for k in R:
     calc_inse(k,0)
@@ -111,6 +139,7 @@ for k in R:
 T.append(timer()) #2
 
 for step in reversed(range(3,res+1)):
+    print(step)
     squa_stuf(step)
 
 T.append(timer()) #3
@@ -123,17 +152,21 @@ T.append(timer()) #4
 
 #SAVING GRAPHICS##############################################################
 
-imageRGB=arrayRGB(M);
-
-img=fromarray(imageRGB,'RGB')
-img.save('image_opt_loops.png')
+fromarray(arrayRGB(M),'RGB').save('image_opt_loops.png')
 
 T.append(timer()) #5
+
+#PRINTING STATISTICS##########################################################
+
+#comment three lines below if statistics not wanted
+print(ress**2)
+print(squac[0])
+print('Pixels calculated indirectly: '+str(round(100*squac[0]/ress**2,3))+'%.')
 
 #PRINTING TIMES###############################################################
 
 for i in range(5):
     print(round(T[i+1]-T[i],3))
-print(round(T[5]-T[0],3))
+print('Total time: '+str(round(T[5]-T[0],3))+' seconds.')
 
 ##############################################################################
